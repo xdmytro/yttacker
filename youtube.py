@@ -65,7 +65,7 @@ def parse_video_data(data):
     return headers, data
     
 
-def fetch_latest_videos(channel_id, api_key, max_results=5):
+def fetch_latest_videos(channel_id, api_key, max_results=1):
     # Construct the playlist ID for the channel's uploads
     playlist_id = "UU" + channel_id[2:]
 
@@ -73,6 +73,7 @@ def fetch_latest_videos(channel_id, api_key, max_results=5):
     url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={playlist_id}&maxResults={max_results}&key={api_key}"
 
     response = requests.get(url)
+    print(response.json())
     
     if response.status_code == 200:
         return response.json()  # Returns the JSON response
@@ -82,6 +83,7 @@ def fetch_latest_videos(channel_id, api_key, max_results=5):
 def parse_latest_videos(data):
     videos = set()    
     for video_info in data["items"]:
+        video_id = video_info["snippet"]["publishedAt"]
         video_id = video_info["snippet"]["resourceId"]["videoId"]
         videos.add(video_id)
     
@@ -90,11 +92,14 @@ def parse_latest_videos(data):
 
 def read_ids(filename):
     ids = set()
-    with open(filename, "r", encoding="utf-8") as file:
-        for line in file:
-            id = line.strip()
-            if id:
-                ids.add(id)
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            for line in file:
+                id = line.strip()
+                if id:
+                    ids.add(id)
+    except:
+        pass
     return ids
 
 def save_ids(filename, ids):
@@ -121,6 +126,9 @@ def infinite_loop():
             headers, row = parse_video_data(data)
             write_to_csv(file_name, headers, row)
 
-        time.sleep(60*interval_minutes)  # Wait for 60 seconds before the next call
+        try:
+            time.sleep(60*interval_minutes)  # Wait for 60 seconds before the next call
+        except KeyboardInterrupt:
+            break
 
 infinite_loop()
