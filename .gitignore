@@ -1,6 +1,6 @@
 config.json
 videos.txt
-stats.txt
+stats.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
