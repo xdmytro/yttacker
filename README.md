@@ -1,6 +1,6 @@
-# YTStats
+# YTTracker
 
-YTStats is a Python tool designed to fetch and record statistics for YouTube videos and channels. It retrieves data such as view counts, like counts, favorite counts, and comment counts for specified YouTube videos and channels, storing this information in a CSV file for further analysis.
+YTTracker is a Python tool designed to fetch and record statistics for YouTube videos and channels. It retrieves data such as view counts, like counts, favorite counts, and comment counts for specified YouTube videos and channels, storing this information in a CSV file for further analysis.
 
 ## Features
 
@@ -38,7 +38,7 @@ YTStats is a Python tool designed to fetch and record statistics for YouTube vid
 Run the script using Python:
 
 ```bash
-python ytstats.py
+python youtube.py
 ```
 
 The script will start fetching data based on the configurations and intervals set in `config.json`.
