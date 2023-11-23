@@ -1,1 +1,1 @@
-pythonw youtube.pyw
+python youtube.py

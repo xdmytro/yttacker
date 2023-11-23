@@ -8,7 +8,7 @@ from datetime import datetime
 def read_config(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
-        return data.get('api_key'), data.get('interval_minutes' )
+        return data.get('api_key'), data.get('interval_minutes' ), data.get('start_date' )
 
 def write_to_csv(file_name, headers, data):
     file_exists = os.path.isfile(file_name)
@@ -65,7 +65,7 @@ def parse_video_data(data):
     return headers, data
     
 
-def fetch_latest_videos(channel_id, api_key, max_results=1):
+def fetch_latest_videos(channel_id, api_key, max_results=5):
     # Construct the playlist ID for the channel's uploads
     playlist_id = "UU" + channel_id[2:]
 
@@ -79,12 +79,13 @@ def fetch_latest_videos(channel_id, api_key, max_results=1):
     else:
         return f"Error: {response.status_code}, {response.text}"
 
-def parse_latest_videos(data):
+def parse_latest_videos(data, start_date):
     videos = set()    
     for video_info in data["items"]:
-        video_id = video_info["snippet"]["publishedAt"]
+        published_at = video_info["snippet"]["publishedAt"]
         video_id = video_info["snippet"]["resourceId"]["videoId"]
-        videos.add(video_id)
+        if published_at > start_date:
+            videos.add(video_id)
     
     return videos
 
@@ -94,7 +95,7 @@ def read_ids(filename):
     try:
         with open(filename, "r", encoding="utf-8") as file:
             for line in file:
-                id = line.strip()
+                id = line.strip().split(' ')[0]
                 if id:
                     ids.add(id)
     except:
@@ -107,7 +108,7 @@ def save_ids(filename, ids):
             file.write(id + '\n')
 
 def infinite_loop():
-    api_key, interval_minutes = read_config("config.json")
+    api_key, interval_minutes, start_date = read_config("config.json")
     file_name = "stats.csv"
     while True:
         video_ids = read_ids("videos.txt")
@@ -115,7 +116,7 @@ def infinite_loop():
         channel_ids = read_ids("channels.txt")
         for channel_id in channel_ids:
             data = fetch_latest_videos(channel_id, api_key)
-            last_videos = parse_latest_videos(data)
+            last_videos = parse_latest_videos(data, start_date)
             video_ids = video_ids.union(last_videos)
         
         save_ids("videos.txt", video_ids)
