@@ -73,7 +73,6 @@ def fetch_latest_videos(channel_id, api_key, max_results=1):
     url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={playlist_id}&maxResults={max_results}&key={api_key}"
 
     response = requests.get(url)
-    print(response.json())
     
     if response.status_code == 200:
         return response.json()  # Returns the JSON response
