@@ -30,8 +30,7 @@ def fetch_video_data(video_id, api_key):
         'Accept': 'application/json'
     }
     response = requests.get(url, headers=headers)
-    print(response.json())
-
+    
     if response.status_code == 200:
         return response.json()  # Returns the JSON response if the request was successful
     else:
@@ -61,6 +60,7 @@ def parse_video_data(data):
     # Headers and data for CSV
     headers = ["Timestamp", "Channel ID", "Channel Title", "Video ID", "Title", "View Count", "Like Count", "Favorite Count", "Comment Count"]
     data = [now, channel_id, channel_title, video_id, title, view_count, like_count, favorite_count, comment_count]
+    print(data)
 
     return headers, data
     
@@ -73,7 +73,6 @@ def fetch_latest_videos(channel_id, api_key, max_results=5):
     url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId={playlist_id}&maxResults={max_results}&key={api_key}"
 
     response = requests.get(url)
-    
     
     if response.status_code == 200:
         return response.json()  # Returns the JSON response
@@ -116,8 +115,7 @@ def infinite_loop():
             video_ids = video_ids.union(last_videos)
         
         save_ids("videos.txt", video_ids)
-        print(video_ids)
-
+        
         for video_id in video_ids:
             data = fetch_video_data(video_id, api_key)
             headers, row = parse_video_data(data)

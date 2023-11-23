@@ -43,6 +43,8 @@ python ytstats.py
 
 The script will start fetching data based on the configurations and intervals set in `config.json`.
 
+To stop the script, press Ctrl+C in the terminal or command prompt.
+
 ## Output
 
 Statistics will be saved to `stats.csv` in the following format:
