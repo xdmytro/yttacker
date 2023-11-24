@@ -1,3 +1,4 @@
+import traceback
 import requests
 import csv
 import os
@@ -111,20 +112,23 @@ def infinite_loop():
     api_key, interval_minutes, start_date = read_config("config.json")
     file_name = "stats.csv"
     while True:
-        video_ids = read_ids("videos.txt")
+        try:
+            video_ids = read_ids("videos.txt")
 
-        channel_ids = read_ids("channels.txt")
-        for channel_id in channel_ids:
-            data = fetch_latest_videos(channel_id, api_key)
-            last_videos = parse_latest_videos(data, start_date)
-            video_ids = video_ids.union(last_videos)
-        
-        save_ids("videos.txt", video_ids)
-        
-        for video_id in video_ids:
-            data = fetch_video_data(video_id, api_key)
-            headers, row = parse_video_data(data)
-            write_to_csv(file_name, headers, row)
+            channel_ids = read_ids("channels.txt")
+            for channel_id in channel_ids:
+                data = fetch_latest_videos(channel_id, api_key)
+                last_videos = parse_latest_videos(data, start_date)
+                video_ids = video_ids.union(last_videos)
+            
+            save_ids("videos.txt", video_ids)
+            
+            for video_id in video_ids:
+                data = fetch_video_data(video_id, api_key)
+                headers, row = parse_video_data(data)
+                write_to_csv(file_name, headers, row)
+        except Exception:
+            traceback.print_exc()
 
         try:
             time.sleep(60*interval_minutes)  # Wait for 60 seconds before the next call
