@@ -1,64 +1,52 @@
 # YTTracker
 
-YTTracker is a Python tool designed to fetch and record statistics for YouTube videos and channels. It retrieves data such as view counts, like counts, favorite counts, and comment counts for specified YouTube videos and channels, storing this information in a CSV file for further analysis.
+YTTracker is a Python script (`youtube.py`) designed to track and record YouTube video statistics. It fetches data like view counts, like counts, and other relevant information for specified YouTube channels and videos, storing this data in a CSV file for easy analysis.
 
 ## Features
 
-- Fetches video statistics from YouTube using the YouTube Data API.
-- Tracks multiple videos and channels.
-- Saves data to a CSV file with custom intervals.
-- Easy to configure and extend.
+- **Data Collection**: Fetches statistics for specific videos and channels from YouTube.
+- **CSV Export**: Records data in a CSV file, including video ID, channel name, view count, like count, and more.
+- **Configurable**: Allows users to specify API keys, interval times, and start dates through a configuration file.
 
-## Setup
-
-### Prerequisites
+## Requirements
 
 - Python 3.x
-- `requests` library (install with `pip install requests`)
+- `requests` library
+- A valid YouTube Data API key
 
-### Configuration
+## Configuration
 
-1. Create a `config.json` file in the root directory with the following structure:
+Before running the script, ensure that you have a `config.json` file set up with your YouTube API key, the interval at which the script should run (in minutes), and the start date for tracking videos.
 
-    ```json
-    {
-        "api_key": "YOUR_YOUTUBE_DATA_API_KEY",
-        "interval_minutes": 1
-    }
-    ```
+Example `config.json`:
 
-    Replace `YOUR_YOUTUBE_DATA_API_KEY` with your actual YouTube Data API key.
-
-2. Create `videos.txt` and `channels.txt` in the root directory.
-   - `channels.txt`: List the YouTube channel IDs for which you want to fetch the latest videos, each on a new line.
-   - `videos.txt`: List the YouTube video IDs you want to track, each on a new line.
+```json
+{
+    "api_key": "YOUR_API_KEY",
+    "interval_minutes": 60,
+    "start_date": "YYYY-MM-DD"
+}
+```
 
 ## Usage
 
-Run the script using Python:
+1. Prepare a list of YouTube channel IDs in `channels.txt`.
+2. Run `youtube.py`.
+3. The script will periodically fetch the latest video data and store it in `stats.csv`.
 
-```bash
-python youtube.py
-```
+## Files
 
-The script will start fetching data based on the configurations and intervals set in `config.json`.
+- `youtube.py`: Main script.
+- `config.json`: Configuration file for API keys and other settings.
+- `channels.txt`: Text file with YouTube channel IDs.
+- `videos.txt`: Text file to keep track of video IDs.
+- `stats.csv`: CSV file where video data is stored.
 
-To stop the script, press Ctrl+C in the terminal or command prompt.
+## Error Handling
 
-## Output
+The script includes basic error handling to manage API request failures and to print stack traces for any unhandled exceptions.
 
-Statistics will be saved to `stats.csv` in the following format:
+## Note
 
-- Timestamp
-- Channel ID
-- Channel Title
-- Video ID
-- Title
-- View Count
-- Like Count
-- Favorite Count
-- Comment Count
+Ensure you adhere to the YouTube API's usage policies and rate limits when using this script.
 
-## Contributing
-
-Contributions, issues, and feature requests are welcome!
