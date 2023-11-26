@@ -61,7 +61,7 @@ def parse_video_data(data):
         favorite_count = statistics.get("favoriteCount", 0) 
         comment_count = statistics.get("commentCount", 0) 
 
-        print([now, channel_title, title[0:30], view_count, like_count, favorite_count, comment_count])
+        print(f"{now:<20} {channel_title[:20]:<20} {title[:50]:<50} {view_count:>8} {like_count:>8} {favorite_count:>8} {comment_count:>8}")
 
         row = [now, channel_id, channel_title, video_id, title, view_count, like_count, favorite_count, comment_count, liveBroadcastContent, publishedAt]
         rows.append(row)
